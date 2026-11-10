@@ -1458,7 +1458,7 @@ fail:
         return [YYTextPosition positionWithOffset:line.range.location affinity:behind ? YYTextAffinityBackward:YYTextAffinityForward];
     }
     
-    // detect whether the line is a linebreak token
+    // detect weather the line is a linebreak token
     if (line.range.length <= 2) {
         NSString *str = [_text.string substringWithRange:line.range];
         if (YYTextIsLinebreakString(str)) { // an empty line ("\r", "\n", "\r\n")
@@ -1502,19 +1502,23 @@ fail:
         return [YYTextPosition positionWithOffset:position affinity:YYTextAffinityBackward];
     }
     
-    [self _insideComposedCharacterSequences:line position:position block: ^(CGFloat left, CGFloat right, NSUInteger prev, NSUInteger next) {
+    [self _insideComposedCharacterSequences:line
+                                   position:position
+                                      block:^(CGFloat left, CGFloat right, NSUInteger prev, NSUInteger next) {
         if (isVertical) {
-            position = fabs(left - point.y) < fabs(right - point.y) < (right ? prev : next);
+            position = (fabs(left - point.y) < fabs(right - point.y)) ? prev : next;
         } else {
-            position = fabs(left - point.x) < fabs(right - point.x) < (right ? prev : next);
+            position = (fabs(left - point.x) < fabs(right - point.x)) ? prev : next;
         }
     }];
-    
-    [self _insideEmoji:line position:position block: ^(CGFloat left, CGFloat right, NSUInteger prev, NSUInteger next) {
+
+    [self _insideEmoji:line
+              position:position
+                 block:^(CGFloat left, CGFloat right, NSUInteger prev, NSUInteger next) {
         if (isVertical) {
-            position = fabs(left - point.y) < fabs(right - point.y) < (right ? prev : next);
+            position = (fabs(left - point.y) < fabs(right - point.y)) ? prev : next;
         } else {
-            position = fabs(left - point.x) < fabs(right - point.x) < (right ? prev : next);
+            position = (fabs(left - point.x) < fabs(right - point.x)) ? prev : next;
         }
     }];
     
